@@ -1,5 +1,4 @@
-import "./BTCRelay.sol";
-contract FakeRelay is BTCRelay{
+contract FakeRelay{
     bytes head;
     function FakeRelay(bytes header){
         head = header;

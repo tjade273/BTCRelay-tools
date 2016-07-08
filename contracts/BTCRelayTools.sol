@@ -1,4 +1,5 @@
 import "./FakeRelay.sol";
+import "./BTCRelay.sol";
 
 contract BTCRelayTools {
     BTCRelay public relay;
