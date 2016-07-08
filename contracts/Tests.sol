@@ -7,6 +7,7 @@ contract RelayToolsTest is Test {
   Tester proxy;
   BTCRelayTools tools;
   uint fee;
+  uint chainHead;
 
   bytes header;
   uint8[80] head = [0x01,  0x00,  0x00,  0x20,  0x53,  0x09,  0x63,  0xc9,  0x6f,  0x62,  0x07,  0xfc,  0x24,  0x24,  0x8b,  0x5d,
@@ -28,12 +29,12 @@ contract RelayToolsTest is Test {
     proxy = new Tester();
     proxy._target(tools);
     fee = uint(fake.getFeeAmount(0));
-
+    chainHead = uint(fake.getLastBlockHeight());
   }
 
   function testBlockHashFetch(){
     bytes32 blockHash;
-    (blockHash,) = tools.getBlockHash.value(1000)(95);
+    (blockHash,) = tools.getBlockHash.value(fee*5)(chainHead-5);
     bytes32 correctHash = 0x000000000000000002efb6b5fc8f50482e5631a25d8b2424fc07626fc9630953;
 
     assertTrue(blockHash == correctHash, blockHash);
@@ -42,7 +43,7 @@ contract RelayToolsTest is Test {
   function testBlockHeaderFetch() {
 
     bytes32 blockHash;
-    (blockHash,) = tools.getBlockHash.value(1000)(95);
+    (blockHash,) = tools.getBlockHash.value(fee*5)(chainHead-5);
 
     bytes4 correctVersion = 0x20000001;
     bytes4 version = tools.getBlockVersion.value(fee)(blockHash);
@@ -78,11 +79,13 @@ contract RelayToolsTest is Test {
   }
 
   function testFailBlockhashInsuffiecientFee(){
-    tools.getBlockHash.value(fee*5-1)(95);
+    tools.getBlockHash.value(fee*5-1)(chainHead-5);
   }
 
   function testBlockhashCorrectFee(){
-    tools.getBlockHash.value(fee*5)(95);
+    tools.getBlockHash.value(fee*5)(chainHead-5);
+    assertTrue(1==1);
+
   }
 
 }
