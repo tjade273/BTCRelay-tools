@@ -33,6 +33,6 @@ contract RelayToolsTest is Test {
     (blockHash,) = tools.getBlockHash(95);
     bytes32 correctHash = 0x000000000000000002efb6b5fc8f50482e5631a25d8b2424fc07626fc9630953;
 
-    assertTrue(blockHash == correctHash);
+    assertTrue(blockHash == correctHash, blockHash);
   }
 }
