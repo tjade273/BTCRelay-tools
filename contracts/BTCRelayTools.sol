@@ -61,14 +61,14 @@ contract BTCRelayTools {
         bytes32 currentHash = bytes32(relay.getBlockchainHead());
         if(blockHeight > highestBlock) throw;
 
-        for(uint i = highestBlock; i >= blockHeight; i--){
+        for(uint i = highestBlock; i > blockHeight; i--){
           if(currentHash == 0) return (0x0,totalFee);
           totalFee += parseBlock(currentHash, i);
           currentHash = blockHeaders[currentHash].parentHash;
         }
 
         if(totalFee > msg.value) throw;
-        return (blockHashes[blockHeight], totalFee);
+        return (blockHeaders[currentHash].parentHash, totalFee);
     }
 
     function getBlockHeight(bytes32 blockHash) returns (uint){
