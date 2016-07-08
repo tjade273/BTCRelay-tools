@@ -13,7 +13,7 @@ contract FakeRelay{
     }
 
     function getFeeAmount(int) returns (int) {
-      return 0;
+      return 10;
     }
 
     function getBlockchainHead() returns (int){
