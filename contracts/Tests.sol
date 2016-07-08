@@ -35,4 +35,34 @@ contract RelayToolsTest is Test {
 
     assertTrue(blockHash == correctHash, blockHash);
   }
+
+  function testBlockHeaderFetch() {
+    bytes32 blockHash;
+    (blockHash,) = tools.getBlockHash(95);
+
+    bytes4 correctVersion = 0x20000001;
+    bytes4 version = tools.getBlockVersion(blockHash);
+    assertTrue(version == correctVersion, version);
+
+    bytes32 correctParentHash = 0x000000000000000002efb6b5fc8f50482e5631a25d8b2424fc07626fc9630953;
+    bytes32 parentHash = tools.getParentHash(blockHash);
+    assertTrue(parentHash == correctParentHash, parentHash);
+
+    bytes32 correctMerkleRoot = 0x93d4447cf1afd7086d0aa43f73aeb715e5e651de8c0a1467ba218d82d53f557c;
+    bytes32 merkleRoot = tools.getMerkleRoot(blockHash);
+    assertTrue(merkleRoot == correctMerkleRoot, merkleRoot);
+
+    bytes4 correctTimestamp = 0x576b12d1;
+    bytes4 timestamp = tools.getTimestamp(blockHash);
+    assertTrue(timestamp == correctTimestamp, timestamp);
+
+    bytes4 correctBits = 0x18053fd6;
+    bytes4 bits = tools.getBits(blockHash);
+    assertTrue(bits == correctBits, bits);
+
+    bytes4 correctNonce = 0x6f9e3a2e;
+    bytes4 nonce = tools.getNonce(blockHash);
+    assertTrue(nonce == correctNonce, nonce);
+
+  }
 }
