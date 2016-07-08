@@ -52,23 +52,30 @@ contract BTCRelayTools {
         }
 
         else{
-            payFee(blockHash);
+            //payFee(blockHash);  //Decide whether people should pay fees for already collected blocks...
+            return 0;
         }
     }
 
     function getBlockHash (uint blockHeight) constant returns (bytes32, uint totalFee){ //Get blockhash of given blocknum
-        uint highestBlock = uint(relay.getLastBlockHeight());
-        bytes32 currentHash = bytes32(relay.getBlockchainHead());
-        if(blockHeight > highestBlock) throw;
+        if(blockHashes[blockHeight] == 0){
+          uint highestBlock = uint(relay.getLastBlockHeight());
+          bytes32 currentHash = bytes32(relay.getBlockchainHead());
+          if(blockHeight > highestBlock) throw;
 
-        for(uint i = highestBlock; i > blockHeight; i--){
-          if(currentHash == 0) return (0x0,totalFee);
-          totalFee += parseBlock(currentHash, i);
-          currentHash = blockHeaders[currentHash].parentHash;
+          for(uint i = highestBlock; i > blockHeight; i--){
+            if(currentHash == 0) return (0x0,totalFee);
+            totalFee += parseBlock(currentHash, i);
+            currentHash = blockHeaders[currentHash].parentHash;
+          }
+
+          if(totalFee > msg.value) throw;
+          return (blockHeaders[currentHash].parentHash, totalFee);
         }
-
-        if(totalFee > msg.value) throw;
-        return (blockHeaders[currentHash].parentHash, totalFee);
+        else {
+          payFee(blockHashes[blockHeight]);
+          return blockHashes[blockHeight];
+        }
     }
 
     function getBlockHeight(bytes32 blockHash) returns (uint){
