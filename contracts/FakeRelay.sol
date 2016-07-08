@@ -8,4 +8,20 @@ contract FakeRelay{
         return head;
     }
 
+    function getFeeRecipient(int) returns (int) {
+        return 0xabcdef;
+    }
+
+    function getFeeAmount(int) returns (int) {
+      return 0;
+    }
+
+    function getBlockchainHead() returns (int){
+      return 0xabcd;
+    }
+
+    function getLastBlockHeight() returns (int) {
+      return 100;
+    }
+
 }
