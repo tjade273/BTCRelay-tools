@@ -4,4 +4,5 @@ contract BTCRelay {
     function getBlockchainHead() returns (int);
     function getFeeAmount(int blockHash) returns (int);
     function getFeeRecipient(int blockhash) returns (int);
+    function getChangeRecipientFee() returns (int);
 }

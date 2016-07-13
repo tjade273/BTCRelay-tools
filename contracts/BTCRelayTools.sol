@@ -57,6 +57,28 @@ contract BTCRelayTools {
         }
     }
 
+    function getFeeAmount(bytes32 blockHash) constant returns (uint){
+      return getFeeAmountByBlockHash(blockHash);
+    }
+
+    function getFeeAmountByBlockHash(bytes32 blockHash) constant returns(uint){ //Can be used unambiguously by Web3
+      return uint(relay.getFeeAmount(int(blockHash)));
+    }
+
+    function getFeeAmount(uint blockHeight) constant returns (uint){
+      return getMaxFeeAmountByBlockHeight(blockHeight);
+    }
+
+    function getMaxFeeAmountByBlockHeight(uint blockHeight) constant returns (uint){
+      if(blockHashes[blockHeight] != 0){
+        return getFeeAmountByBlockHash(blockHashes[blockHeight]);
+      }
+      else {  //TODO: Figure out how to give a more accurate estimate
+        if(blockHeight > uint(relay.getLastBlockHeight())) throw;
+        return (uint(relay.getLastBlockHeight()) - blockHeight) * uint(relay.getChangeRecipientFee());
+      }
+    }
+
     function getBlockHash (uint blockHeight) constant returns (bytes32, uint totalFee){ //Get blockhash of given blocknum
         if(blockHashes[blockHeight] == 0){
           uint highestBlock = uint(relay.getLastBlockHeight());

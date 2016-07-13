@@ -88,19 +88,25 @@ contract RelayToolsTest is Test {
   }
 
   function testSecondGetterFee(){
-    var balance = this.balance;
     tools.getBlockHash.value(fee*5)(chainHead-5);
     tools.getBlockHash.value(fee)(chainHead-4);
 
   }
 
   function testFailSecondGetterFee(){
-    var balance = this.balance;
-    tools.getBlockHash.value(fee*5)(chainHead-5);
-    tools.getBlockHash.value(fee-1)(chainHead-4);
+    tools.getBlockHash.value(fee*5)(chainHead-5);  //First fetch pays full fee
+    tools.getBlockHash.value(fee-1)(chainHead-4);  //Second fetch must pay base fee
 
   }
 
+  function testGetHeaderFee(){
+    uint changeFee = uint(fake.getChangeRecipientFee());
+    uint headerFee = tools.getFeeAmount(chainHead - 5);
 
+    assertTrue(headerFee == changeFee*5, bytes32(headerFee));
+
+    headerFee = tools.getFeeAmount(chainHead - 4);
+    assertTrue(headerFee == fee, bytes32(headerFee));
+  }
 
 }

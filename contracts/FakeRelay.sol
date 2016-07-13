@@ -24,4 +24,8 @@ contract FakeRelay{
       return 100;
     }
 
+    function getChangeRecipientFee() returns (int) {
+      return 20;
+    }
+
 }
