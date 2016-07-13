@@ -74,7 +74,7 @@ contract BTCRelayTools {
         }
         else {
           payFee(blockHashes[blockHeight]);
-          return blockHashes[blockHeight];
+          return (blockHashes[blockHeight], totalFee);
         }
     }
 

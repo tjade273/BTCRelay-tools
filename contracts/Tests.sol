@@ -85,7 +85,22 @@ contract RelayToolsTest is Test {
   function testBlockhashCorrectFee(){
     tools.getBlockHash.value(fee*5)(chainHead-5);
     assertTrue(1==1);
+  }
+
+  function testSecondGetterFee(){
+    var balance = this.balance;
+    tools.getBlockHash.value(fee*5)(chainHead-5);
+    tools.getBlockHash.value(fee)(chainHead-4);
 
   }
+
+  function testFailSecondGetterFee(){
+    var balance = this.balance;
+    tools.getBlockHash.value(fee*5)(chainHead-5);
+    tools.getBlockHash.value(fee-1)(chainHead-4);
+
+  }
+
+
 
 }
