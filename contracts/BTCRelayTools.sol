@@ -140,10 +140,17 @@ contract BTCRelayTools {
 
     function payFee(bytes32 blockHash) private {
         uint fee = uint(relay.getFeeAmount(int(blockHash)));
-        address recipient = address(relay.getFeeRecipient(int(blockHash)));
+        uint changeFee = uint(relay.getChangeRecipientFee());
+        if (fee > changeFee){
+          if (changeFee > msg.value) throw;
+          relay.changeFeeRecipient(int(blockHash), int(changeFee / 2), int(msg.sender));
+        }
+        else{
+          address recipient = address(relay.getFeeRecipient(int(blockHash)));
 
-        if(fee > msg.value) throw;
-        recipient.send(fee); //If the fee doesn't go through, oh well....
+          if(fee > msg.value) throw;
+          recipient.send(fee); //If the fee doesn't go through, oh well....
+        }
     }
 
     function getParentHash(bytes32[5] header) internal returns (bytes32 parentHash){

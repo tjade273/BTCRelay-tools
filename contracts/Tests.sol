@@ -104,6 +104,7 @@ contract RelayToolsTest is Test {
     uint headerFee = tools.getFeeAmount(chainHead - 5);
 
     assertTrue(headerFee == changeFee*5, bytes32(headerFee));
+    tools.getBlockHash.value(fee*5)(chainHead-5); //cache result
 
     headerFee = tools.getFeeAmount(chainHead - 4);
     assertTrue(headerFee == fee, bytes32(headerFee));
