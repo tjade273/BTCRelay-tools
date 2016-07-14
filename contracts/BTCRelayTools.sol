@@ -57,6 +57,14 @@ contract BTCRelayTools {
         }
     }
 
+    function getBlockchainHead() constant returns (bytes32){
+      return bytes32(relay.getBlockchainHead());
+    }
+
+    function getLastBlockHeight() constant return (uint){
+      return uint(relay.getLastBlockHeight);
+    }
+
     function verifyTx(bytes rawTransaction, uint transactionIndex, bytes32[] merkleSiblings, bytes32 blockHash) returns (bytes32 txHash){
       txHash = bytes32(relay.verifyTx(rawTransaction, int(transactionIndex), merkleSiblings, int(blockHash)));
       payFee(blockHash);
