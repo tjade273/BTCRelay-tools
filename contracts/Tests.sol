@@ -110,4 +110,17 @@ contract RelayToolsTest is Test {
     assertTrue(headerFee == fee, bytes32(headerFee));
   }
 
+  function testZeroBalance(){
+    tools.getBlockHash.value(fee*10)(chainHead-5);
+
+    var (blockHash,) = tools.getBlockHash.value(fee*10)(chainHead-5);
+    tools.getBlockHeight.value(fee*10)(blockHash);
+    tools.getNonce.value(fee*10)(blockHash);
+    tools.getMerkleRoot.value(fee*10)(blockHash);
+    tools.getBits.value(fee*10)(blockHash);
+    tools.getParentHash.value(fee*10)(blockHash);
+
+    assertTrue(tools.balance == 0, bytes32(tools.balance));
+  }
+
 }

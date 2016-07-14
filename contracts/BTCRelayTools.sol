@@ -165,7 +165,7 @@ contract BTCRelayTools {
     }
 
     function returnFunds() private { //The contract should never hold funds
-      if(!msg.sender.call.value(this.balance)) throw;
+      if(!msg.sender.call.value(this.balance)()) throw;
     }
 
     function getParentHash(bytes32[5] header) internal returns (bytes32 parentHash){
