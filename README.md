@@ -12,7 +12,7 @@ ABI:
 
 ## Transaction Verification
 
-### verifyTx(rawTransaction, transactionIndex, merkleSibling, blockHash)
+#### verifyTx(rawTransaction, transactionIndex, merkleSibling, blockHash)
 
 Verifies the presence of a transaction on the Bitcoin blockchain, primarily that the transaction is on Bitcoin's main chain and has at least 6 confirmations.
 
@@ -26,7 +26,9 @@ Verifies the presence of a transaction on the Bitcoin blockchain, primarily that
 * hash of the verified Bitcoin transaction
 * 0 if rawTransaction is exactly 64 bytes in length or fails verification
 
-### relayTx(rawTransaction, transactionIndex, merkleSibling, blockHash, contractAddress)
+---
+
+#### relayTx(rawTransaction, transactionIndex, merkleSibling, blockHash, contractAddress)
 
 Verifies a Bitcoin transaction per `verifyTx()` and relays the verified transaction to the specified Ethereum contract.
 
@@ -49,7 +51,7 @@ _Note: Callers cannot be 100% certain when an relay error occurs because_ -1  _m
 
 ## Block Lookup
 
-### getBlockHash(blockHeight)
+#### getBlockHash(blockHeight)
 
 Get the block hash for a given blockHeight.
 
@@ -62,8 +64,9 @@ Get the block hash for a given blockHeight.
 
 *NOTE:  Due to the mechanics of BTC Relay, in order to fetch a block hash we must iterate over all of the successive blocks in the chain, paying the required fee for each. This is only true the first time a given block header is fetched, so before calling this function make sure to call `getFeeAmount()` and check if you are willing to pay the current price.*
 
+---
 
-### getBlockHeight(blockHash)
+#### getBlockHeight(blockHash)
 
 Get the block height of a block by its hash
 
@@ -82,8 +85,8 @@ You must pay a small fee for these, i.e.
 
     uint fee = relay.getFeeAmount(blockHash);
     bytes32 merkleRoot = relay.getMerkleRoot.value(fee)(blockHash);
-
-### getBlockVersion(blockHash)
+---
+#### getBlockVersion(blockHash)
 
 Get the Bitcoin block version bytes
 
@@ -94,7 +97,9 @@ Get the Bitcoin block version bytes
 * 4-byte BTC block version indicator
 * 0 if not found
 
-### getParentHash(blockHash)
+---
+
+#### getParentHash(blockHash)
 
 Get the hash of the block immediately previous
 
@@ -105,7 +110,9 @@ Get the hash of the block immediately previous
 * Blockhash of the parent block
 * 0 if not found
 
-### getMerkleRoot(blockHash)
+---
+
+#### getMerkleRoot(blockHash)
 
 Get the Merkle root for the block
 
@@ -116,7 +123,9 @@ Get the Merkle root for the block
 * Merkle root of the block
 * 0 if not found
 
-### getTimestamp(blockHash)
+---
+
+#### getTimestamp(blockHash)
 
 Get the timestamp of the block, as a `bytes4`
 
@@ -127,7 +136,9 @@ Get the timestamp of the block, as a `bytes4`
 * Timestamp of the block
 * 0 if not found
 
-### getBits(blockHash)
+---
+
+#### getBits(blockHash)
 
 Get the abbreviated difficulty
 - Actual difficulty is calculated as `bits * 2**(8*(0x1b - 3))`
@@ -139,7 +150,9 @@ Get the abbreviated difficulty
 * Bits field of the block
 * 0 if not found
 
-### getNonce(blockHash)
+---
+
+#### getNonce(blockHash)
 
 Get the nonce of the block
 
@@ -149,3 +162,5 @@ Get the nonce of the block
 **Returns:** `bytes4`
 * Nonce field of the block
 * 0 if not found
+
+---
