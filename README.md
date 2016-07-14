@@ -12,6 +12,8 @@ ABI:
 
 ## Transaction Verification
 
+Functions for validating transactions. **Insert example here**
+
 #### verifyTx(rawTransaction, transactionIndex, merkleSibling, blockHash)
 
 Verifies the presence of a transaction on the Bitcoin blockchain, primarily that the transaction is on Bitcoin's main chain and has at least 6 confirmations.
@@ -50,6 +52,8 @@ _Note: Callers cannot be 100% certain when an relay error occurs because_ -1  _m
 --------------------------------------------------------------------------------
 
 ## Block Lookup
+
+Functions for finding particular blocks
 
 #### getBlockHash(blockHeight)
 
@@ -164,3 +168,64 @@ Get the nonce of the block
 * 0 if not found
 
 ---
+
+## Chain Info
+
+These functions are free and provide general information about the state of the blockchain
+
+#### getLastBlockHeight()
+
+**Returns:** `uint256`
+* Block height of most recently relayed block
+
+---
+
+#### getBlockchainHead()
+
+**Returns:** `bytes32`
+* Block hash of the latest block
+
+---
+
+#### getAverageChainWork()
+
+**Returns:** `uint`
+* The difference between the chainWork of the latest block and the 10th block prior.
+
+This is provided in case an Ethereum contract wants to use the chainWork or Bitcoin network difficulty (which can be derived) as a data feed.
+
+---
+
+## Fee Estimators
+
+These estimates are guaranteed to be enough for execution, although your contract may receive a refund to a function called `_relay_refund()`, or your fallback function if that does not exist.
+
+#### getFeeAmount(blockHash|blockHeight)
+
+`uint` is interpreted as a block height, `bytes32` is interpreted as a block hash. For less ambiguity, you may use the more verbose functions
+
+**Arguments:**
+* `blockhash: bytes32` - BTC block hash of the block whose fee you need
+**or**
+* `blockHeight: uint256` - Height of block
+
+**Returns:** `uint`
+* Fee to be paid for accessing block header
+
+---
+
+#### getFeeAmountByBlockHash(blockHeight)
+
+* `blockhash: bytes32` - BTC block hash of the block whose fee you need
+
+**Returns:** `uint`
+* Fee to be paid for accessing block header
+
+---
+
+#### getMaxFeeAmountByBlockHeight(blockHeight)
+
+* `blockHeight: uint256` - Height of block
+
+**Returns:** `uint`
+* Fee to be paid for accessing block header
