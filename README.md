@@ -73,4 +73,5 @@ Get the block height of a block by its hash
 **Returns:** `uint`
 * Height of the block
 * 0 if not found
+
 --------------------------------------------------------------------------------
