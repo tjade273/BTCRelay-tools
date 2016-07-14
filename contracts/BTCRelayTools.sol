@@ -61,28 +61,28 @@ contract BTCRelayTools {
       return bytes32(relay.getBlockchainHead());
     }
 
-    function getLastBlockHeight() constant return (uint){
-      return uint(relay.getLastBlockHeight);
+    function getLastBlockHeight() constant returns (uint){
+      return uint(relay.getLastBlockHeight());
     }
 
     function verifyTx(bytes rawTransaction, uint transactionIndex, bytes32[] merkleSiblings, bytes32 blockHash) returns (bytes32 txHash){
-      uint fee = uint(relay.getFeeAmount(blockHash));
+      uint fee = uint(relay.getFeeAmount(int(blockHash)));
       uint changeFee = uint(relay.getChangeRecipientFee());
       if(fee >= changeFee){
-        relay.changeFeeRecipient.vaue(changeFee)(blockHash, changeFee / 2, msg.sender);
+        relay.changeFeeRecipient.value(changeFee)(int(blockHash), int(changeFee / 2), int(msg.sender));
         fee = changeFee/2;
       }
       txHash = bytes32(relay.verifyTx.value(fee)(rawTransaction, int(transactionIndex), merkleSiblings, int(blockHash)));
     }
 
     function relayTx(bytes rawTransaction, uint transactionIndex, bytes32[] merkleSiblings, bytes32 blockHash, address contractAddress) returns (int){
-      uint fee = uint(relay.getFeeAmount(blockHash));
+      uint fee = uint(relay.getFeeAmount(int(blockHash)));
       uint changeFee = uint(relay.getChangeRecipientFee());
       if(fee >= changeFee){
-        relay.changeFeeRecipient.vaue(changeFee)(blockHash, changeFee / 2, msg.sender);
+        relay.changeFeeRecipient.value(changeFee)(int(blockHash), int(changeFee / 2), int(msg.sender));
         fee = changeFee/2;
       }
-      int res = relay.relayTx.value(fee)(rawTransaction, transactionIndex, merkleSiblings, blockHash, contractAddress);
+      int res = relay.relayTx.value(fee)(rawTransaction, int(transactionIndex), merkleSiblings, int(blockHash), int(contractAddress));
       if(res == 30010) return -1;
       else return res;
     }
@@ -140,7 +140,7 @@ contract BTCRelayTools {
 
     function getBlockHeight(bytes32 blockHash) returns (uint){
         payFee(blockHash);
-        returnFundwqs();
+        returnFunds();
         return blockHeaders[blockHash].blockHeight;
     }
 
