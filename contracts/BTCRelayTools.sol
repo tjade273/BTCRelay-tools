@@ -121,7 +121,7 @@ contract BTCRelayTools {
           bytes32 currentHash = bytes32(relay.getBlockchainHead());
           if(blockHeight > highestBlock) return (0,0);
 
-          for(uint i = highestBlock-1; i > blockHeight; i--){
+          for(uint i = highestBlock-1; i >= blockHeight; i--){
             if(currentHash == 0) return (0x0,totalFee);
             if(blockHashes[i] == 0 && totalFee + getFeeAmount(currentHash) > msg.value) return (0,totalFee); // Return 0 if out of funds
             totalFee += parseBlock(currentHash, i);
