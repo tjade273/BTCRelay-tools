@@ -71,10 +71,12 @@ contract BTCRelayTools {
 
     function getMaxFeeAmountByBlockHeight(uint blockHeight) constant returns (uint){
       if(blockHashes[blockHeight] != 0){
+        returnFunds();
         return getFeeAmountByBlockHash(blockHashes[blockHeight]);
       }
       else {  //TODO: Figure out how to give a more accurate estimate
         if(blockHeight > uint(relay.getLastBlockHeight())) throw;
+        returnFunds();
         return (uint(relay.getLastBlockHeight()) - blockHeight) * uint(relay.getChangeRecipientFee());
       }
     }
@@ -92,46 +94,55 @@ contract BTCRelayTools {
           }
 
           if(totalFee > msg.value) throw;
+          returnFunds();
           return (blockHeaders[currentHash].parentHash, totalFee);
         }
         else {
           payFee(blockHashes[blockHeight]);
+          returnFunds();
           return (blockHashes[blockHeight], totalFee);
         }
     }
 
     function getBlockHeight(bytes32 blockHash) returns (uint){
         payFee(blockHash);
+        returnFunds();
         return blockHeaders[blockHash].blockHeight;
     }
 
     function getBlockVersion(bytes32 blockHash) returns (bytes4) {
         payFee(blockHash);
+        returnFunds();
         return blockHeaders[blockHash].version;
     }
 
     function getParentHash(bytes32 blockHash) returns (bytes32) {
         payFee(blockHash);
+        returnFunds();
         return blockHeaders[blockHash].parentHash;
     }
 
     function getMerkleRoot(bytes32 blockHash) returns (bytes32) {
         payFee(blockHash);
+        returnFunds();
         return blockHeaders[blockHash].merkleRoot;
     }
 
     function getTimestamp(bytes32 blockHash) returns (bytes4) {
         payFee(blockHash);
+        returnFunds();
         return blockHeaders[blockHash].timestamp;
     }
 
     function getBits(bytes32 blockHash) returns (bytes4) {
         payFee(blockHash);
+        returnFunds();
         return blockHeaders[blockHash].bits;
     }
 
     function getNonce(bytes32 blockHash) returns (bytes4) {
         payFee(blockHash);
+        returnFunds();
         return blockHeaders[blockHash].nonce;
     }
 
@@ -151,6 +162,10 @@ contract BTCRelayTools {
           if(fee > msg.value) throw;
           recipient.send(fee); //If the fee doesn't go through, oh well....
         }
+    }
+
+    function returnFunds() private { //The contract should never hold funds
+      if(!msg.sender.call.value(this.balance)) throw;
     }
 
     function getParentHash(bytes32[5] header) internal returns (bytes32 parentHash){
