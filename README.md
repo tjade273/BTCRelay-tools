@@ -43,7 +43,8 @@ The processor contract at contractAddress should have a function of signature `p
 * value returned by the processor contract's processTransaction function
 or **-1** on failure
 
-Note: Callers cannot be 100% certain when an relay error occurs because **-1** may also have been returned by processTransaction(). Callers should be aware of the contract that they are relaying transactions to, and understand what the processor contract's processTransaction method returns.
+**Note: Callers cannot be 100% certain when an relay error occurs because** -1 **may also have been returned by processTransaction(). Callers should be aware of the contract that they are relaying transactions to, and understand what the processor contract's processTransaction method returns.**
+
 --------------------------------------------------------------------------------
 
 ## Block Lookup
@@ -73,4 +74,3 @@ Get the block height of a block by its hash
 * Height of the block
 * 0 if not found
 --------------------------------------------------------------------------------
-#
