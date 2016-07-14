@@ -62,6 +62,10 @@ contract BTCRelayTools {
       payFee(blockHash);
     }
 
+    function getAverageChainWork() constant returns (uint){
+      return uint(relay.getAverageChainWork());
+    }
+
     function getFeeAmount(bytes32 blockHash) constant returns (uint){
       return getFeeAmountByBlockHash(blockHash);
     }
