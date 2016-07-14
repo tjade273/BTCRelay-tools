@@ -140,7 +140,7 @@ contract BTCRelayTools {
 
     function getBlockHeight(bytes32 blockHash) returns (uint){
         payFee(blockHash);
-        returnFunds();
+        returnFundwqs();
         return blockHeaders[blockHash].blockHeight;
     }
 
@@ -199,7 +199,7 @@ contract BTCRelayTools {
     }
 
     function returnFunds() private { //The contract should never hold funds
-      if(!msg.sender.call.value(this.balance)()) throw;
+      if(!msg.sender.call.value(this.balance)(bytes4(sha3("_relay_refund()")))) throw;
     }
 
     function getParentHash(bytes32[5] header) internal returns (bytes32 parentHash){
