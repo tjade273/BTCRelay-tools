@@ -39,7 +39,7 @@ contract BTCRelayTools {
 
     function parseBlock(bytes32 blockHash, uint blockHeight) internal returns (uint fee) {
 
-        fee = uint(relay.getFeeAmount(int(blockHash)));
+        fee = getFeeAmount(blockHash);
 
         if(blockHashes[blockHeight] == 0){
             bytes32[5] memory blockHeader = relay.getBlockHeader.value(fee)(int(blockHash));
@@ -123,7 +123,7 @@ contract BTCRelayTools {
 
           for(uint i = highestBlock; i > blockHeight; i--){
             if(currentHash == 0) return (0x0,totalFee);
-            if(totalFee + getFeeAmount(currentHash) >= msg.value) return (0,totalFee); // Return 0 if out of funds
+            if(blockHashes[i] == 0 && totalFee + getFeeAmount(currentHash) > msg.value) return (0,totalFee); // Return 0 if out of funds
             totalFee += parseBlock(currentHash, i);
             currentHash = blockHeaders[currentHash].parentHash;
           }

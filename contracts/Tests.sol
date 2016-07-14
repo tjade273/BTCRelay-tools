@@ -78,25 +78,27 @@ contract RelayToolsTest is Test {
     bytes4 version = tools.getBlockVersion.value(fee/2)(0);
   }
 
-  function testFailBlockhashInsuffiecientFee(){
+  function testNoFailBlockhashInsuffiecientFee(){           //No longer fail due to insufficient fee in blockhash getter
     tools.getBlockHash.value(fee*5-1)(chainHead-5);
   }
 
   function testBlockhashCorrectFee(){
     tools.getBlockHash.value(fee*5)(chainHead-5);
-    assertTrue(1==1);
   }
 
   function testSecondGetterFee(){
     tools.getBlockHash.value(fee*5)(chainHead-5);
     tools.getBlockHash.value(fee)(chainHead-4);
-
   }
 
-  function testFailSecondGetterFee(){
-    tools.getBlockHash.value(fee*5)(chainHead-5);  //First fetch pays full fee
-    tools.getBlockHash.value(fee-1)(chainHead-4);  //Second fetch must pay base fee
+  function testPartialSecondGetterFee(){
+    uint hashFee;
+    bytes32 h;
+    (,hashFee) = tools.getBlockHash.value(2*fee)(chainHead-4);  //Pay half of fee
+    (h, ) = tools.getBlockHash.value(2*fee)(chainHead-4); //Pay rest of fee
 
+    assertTrue(hashFee == 2*fee, bytes32(hashFee));
+    assertTrue(h == 0x000000000000000002efb6b5fc8f50482e5631a25d8b2424fc07626fc9630953, h);
   }
 
   function testGetHeaderFee(){
