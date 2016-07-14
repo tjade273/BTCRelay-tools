@@ -125,9 +125,9 @@ contract BTCRelayTools {
             if(currentHash == 0) return (0x0,totalFee);
             totalFee += parseBlock(currentHash, i);
             currentHash = blockHeaders[currentHash].parentHash;
+            if(totalFee >= msg.value) return 0; // Return 0 if out of funds
           }
 
-          if(totalFee > msg.value) throw;
           returnFunds();
           return (blockHeaders[currentHash].parentHash, totalFee);
         }
