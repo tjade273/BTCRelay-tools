@@ -66,12 +66,25 @@ contract BTCRelayTools {
     }
 
     function verifyTx(bytes rawTransaction, uint transactionIndex, bytes32[] merkleSiblings, bytes32 blockHash) returns (bytes32 txHash){
-      txHash = bytes32(relay.verifyTx(rawTransaction, int(transactionIndex), merkleSiblings, int(blockHash)));
-      payFee(blockHash);
+      uint fee = uint(relay.getFeeAmount(blockHash));
+      uint changeFee = uint(relay.getChangeRecipientFee());
+      if(fee >= changeFee){
+        relay.changeFeeRecipient.vaue(changeFee)(blockHash, changeFee / 2, msg.sender);
+        fee = changeFee/2;
+      }
+      txHash = bytes32(relay.verifyTx.value(fee)(rawTransaction, int(transactionIndex), merkleSiblings, int(blockHash)));
     }
 
-    function relayTx(bytes rawTransaction, uint transactionIndex, bytes32[] merkleSiblings, bytes32 blockHash, address contractAddress) returns (uint){
-      return uint(relay.relayTx(rawTransaction, transactionIndex, merkleSiblings, blockHash, contractAddress));
+    function relayTx(bytes rawTransaction, uint transactionIndex, bytes32[] merkleSiblings, bytes32 blockHash, address contractAddress) returns (int){
+      uint fee = uint(relay.getFeeAmount(blockHash));
+      uint changeFee = uint(relay.getChangeRecipientFee());
+      if(fee >= changeFee){
+        relay.changeFeeRecipient.vaue(changeFee)(blockHash, changeFee / 2, msg.sender);
+        fee = changeFee/2;
+      }
+      int res = relay.relayTx.value(fee)(rawTransaction, transactionIndex, merkleSiblings, blockHash, contractAddress);
+      if(res == 30010) return -1;
+      else return res;
     }
 
     function getAverageChainWork() constant returns (uint){

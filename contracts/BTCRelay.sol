@@ -7,4 +7,5 @@ contract BTCRelay {
     function getChangeRecipientFee() returns (int);
     function changeFeeRecipient(int blockHash, int fee, int recipient);
     function verifyTx(bytes, int, bytes32[], int) returns (int);
+    function getAverageChainWork() returns (int);
 }
