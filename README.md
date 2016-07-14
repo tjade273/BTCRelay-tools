@@ -68,10 +68,84 @@ Get the block hash for a given blockHeight.
 Get the block height of a block by its hash
 
 **Arguments:**
-* `blockHash: bytes32` - hash of the block
+* `blockHash: bytes32` - block hash of a Bitcoin block
 
 **Returns:** `uint`
 * Height of the block
 * 0 if not found
 
 --------------------------------------------------------------------------------
+
+## Block Header Fields
+
+You must pay a small fee for these, i.e.
+
+    uint fee = relay.getFeeAmount(blockHash);
+    bytes32 merkleRoot = relay.getMerkleRoot.value(fee)(blockHash);
+
+### getBlockVersion(blockHash)
+
+Get the Bitcoin block version bytes
+
+**Arguments:**
+* `blockHash: bytes32` - BTC block hash
+
+**Returns:** `bytes4`
+* 4-byte BTC block version indicator
+* 0 if not found
+
+### getParentHash(blockHash)
+
+Get the hash of the block immediately previous
+
+**Arguments:**
+* `blockHash: bytes32` - BTC block hash
+
+**Returns:** `bytes32`
+* Blockhash of the parent block
+* 0 if not found
+
+### getMerkleRoot(blockHash)
+
+Get the Merkle root for the block
+
+**Arguments:**
+* `blockHash: bytes32` - BTC block hash
+
+**Returns:** `bytes32`
+* Merkle root of the block
+* 0 if not found
+
+### getTimestamp(blockHash)
+
+Get the timestamp of the block, as a `bytes4`
+
+**Arguments:**
+* `blockHash: bytes32` - BTC block hash
+
+**Returns:** `bytes4`
+* Timestamp of the block
+* 0 if not found
+
+### getBits(blockHash)
+
+Get the abbreviated difficulty
+- Actual difficulty is calculated as `bits * 2**(8*(0x1b - 3))`
+
+**Arguments:**
+* `blockHash: bytes32` - BTC block hash
+
+**Returns:** `bytes4`
+* Bits field of the block
+* 0 if not found
+
+### getNonce(blockHash)
+
+Get the nonce of the block
+
+**Arguments:**
+* `blockHash: bytes32` - BTC block hash
+
+**Returns:** `bytes4`
+* Nonce field of the block
+* 0 if not found
