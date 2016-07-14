@@ -41,7 +41,7 @@ contract BTCRelayTools {
 
         fee = uint(relay.getFeeAmount(int(blockHash)));
 
-        if(blockHashes[blockHeight] ==0){
+        if(blockHashes[blockHeight] == 0){
             bytes32[5] memory blockHeader = relay.getBlockHeader.value(fee)(int(blockHash));
 
             blockHashes[blockHeight] = blockHash;
@@ -119,13 +119,13 @@ contract BTCRelayTools {
         if(blockHashes[blockHeight] == 0){
           uint highestBlock = uint(relay.getLastBlockHeight());
           bytes32 currentHash = bytes32(relay.getBlockchainHead());
-          if(blockHeight > highestBlock) throw;
+          if(blockHeight > highestBlock) return (0,0);
 
           for(uint i = highestBlock; i > blockHeight; i--){
             if(currentHash == 0) return (0x0,totalFee);
+            if(totalFee + getFeeAmount(currentHash) >= msg.value) return (0,totalFee); // Return 0 if out of funds
             totalFee += parseBlock(currentHash, i);
             currentHash = blockHeaders[currentHash].parentHash;
-            if(totalFee >= msg.value) return 0; // Return 0 if out of funds
           }
 
           returnFunds();
