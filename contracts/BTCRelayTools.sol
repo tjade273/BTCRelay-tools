@@ -57,6 +57,11 @@ contract BTCRelayTools {
         }
     }
 
+    function verifyTx(bytes rawTransaction, uint transactionIndex, bytes32[] merkleSiblings, bytes32 blockHash) returns (bytes32 txHash){
+      txHash = bytes32(relay.verifyTx(rawTransaction, int(transactionIndex), merkleSiblings, int(blockHash)));
+      payFee(blockHash);
+    }
+
     function getFeeAmount(bytes32 blockHash) constant returns (uint){
       return getFeeAmountByBlockHash(blockHash);
     }
