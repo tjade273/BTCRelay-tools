@@ -70,6 +70,10 @@ contract BTCRelayTools {
       payFee(blockHash);
     }
 
+    function relayTx(bytes rawTransaction, uint transactionIndex, bytes32[] merkleSiblings, bytes32 blockHash, address contractAddress) returns (uint){
+      return uint(relay.relayTx(rawTransaction, transactionIndex, merkleSiblings, blockHash, contractAddress));
+    }
+
     function getAverageChainWork() constant returns (uint){
       return uint(relay.getAverageChainWork());
     }
